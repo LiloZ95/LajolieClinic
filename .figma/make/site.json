@@ -1,0 +1,10 @@
+{
+  "description": "This web application streamlines clinic management by providing appointment scheduling, patient records, and communication tools, enhancing efficiency for healthcare providers.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
