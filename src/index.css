@@ -27,57 +27,85 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-* {
-  scrollbar-width: none;
+/* The sticky header is 4rem tall; without this every `scrollIntoView`
+   target lands underneath it. */
+section[id] {
+  scroll-margin-top: 5rem;
 }
-*::-webkit-scrollbar {
+
+/* Keyboard focus must stay visible — the design's `focus:outline-none`
+   inputs opt back in via their own ring utilities. */
+:focus-visible {
+  outline: 2px solid #c49068;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ── Marquees ────────────────────────────────────────────────────────────────
+   Each track holds two identical groups. A group carries its own trailing gap
+   (padding-inline-end === gap), so the group width is an exact repeat unit and
+   translating -50% lands seam-free. Putting the gap *between* the groups
+   instead leaves half a gap unaccounted for and the row visibly jumps. */
+.marquee-track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+}
+
+.marquee-track:hover,
+.marquee-track:focus-within {
+  animation-play-state: paused;
+}
+
+@keyframes marquee-left {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@keyframes marquee-right {
+  from { transform: translateX(-50%); }
+  to   { transform: translateX(0); }
+}
+
+.marquee-left {
+  animation: marquee-left var(--marquee-duration, 30s) linear infinite;
+}
+
+.marquee-right {
+  animation: marquee-right var(--marquee-duration, 30s) linear infinite;
+}
+
+/* Horizontal scroll fallback for the mobile treatment rail — hide the bar,
+   keep the scrolling. Scoped, not global: desktop scrollbars stay usable. */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
   display: none;
 }
 
-@keyframes ticker {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 
-.ticker-track {
-  animation: ticker 28s linear infinite;
-  white-space: nowrap;
-}
+  .marquee-left,
+  .marquee-right {
+    animation: none;
+  }
 
-.ticker-track:hover {
-  animation-play-state: paused;
-}
+  /* Without the animation the track is twice as wide as it needs to be;
+     let the user scroll it by hand instead. */
+  .marquee-viewport {
+    overflow-x: auto;
+  }
 
-@keyframes gallery-left {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-
-@keyframes gallery-right {
-  0% { transform: translateX(-50%); }
-  100% { transform: translateX(0); }
-}
-
-.gallery-row-left {
-  animation: gallery-left 32s linear infinite;
-  will-change: transform;
-}
-
-.gallery-row-right {
-  animation: gallery-right 28s linear infinite;
-  will-change: transform;
-}
-
-.gallery-row-left:hover,
-.gallery-row-right:hover {
-  animation-play-state: paused;
-}
-
-@keyframes fade-up {
-  from { opacity: 0; transform: translateY(24px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-.gallery-fade-in {
-  animation: fade-up 0.7s ease forwards;
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
