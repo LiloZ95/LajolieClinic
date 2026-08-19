@@ -1,0 +1,111 @@
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=DM+Sans:wght@300;400;500;600&display=swap');
+@import 'tailwindcss';
+
+@theme {
+  --color-cream: #faf0e8;
+  --color-cream-dark: #f2e6d8;
+  --color-gold: #c49068;
+  --color-gold-dark: #a87650;
+  --color-bark: #1c1710;
+  --color-bark-muted: #6b5c4e;
+  --color-bark-light: #9c8878;
+  --color-card: #ffffff;
+  --color-border: rgba(196, 144, 104, 0.2);
+
+  --font-serif: 'Lora', Georgia, serif;
+  --font-sans: 'DM Sans', system-ui, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #faf0e8;
+  color: #1c1710;
+  font-family: 'DM Sans', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* The sticky header is 4rem tall; without this every `scrollIntoView`
+   target lands underneath it. */
+section[id] {
+  scroll-margin-top: 5rem;
+}
+
+/* Keyboard focus must stay visible — the design's `focus:outline-none`
+   inputs opt back in via their own ring utilities. */
+:focus-visible {
+  outline: 2px solid #c49068;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ── Marquees ────────────────────────────────────────────────────────────────
+   Each track holds two identical groups. A group carries its own trailing gap
+   (padding-inline-end === gap), so the group width is an exact repeat unit and
+   translating -50% lands seam-free. Putting the gap *between* the groups
+   instead leaves half a gap unaccounted for and the row visibly jumps. */
+.marquee-track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+}
+
+.marquee-track:hover,
+.marquee-track:focus-within {
+  animation-play-state: paused;
+}
+
+@keyframes marquee-left {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@keyframes marquee-right {
+  from { transform: translateX(-50%); }
+  to   { transform: translateX(0); }
+}
+
+.marquee-left {
+  animation: marquee-left var(--marquee-duration, 30s) linear infinite;
+}
+
+.marquee-right {
+  animation: marquee-right var(--marquee-duration, 30s) linear infinite;
+}
+
+/* Horizontal scroll fallback for the mobile treatment rail — hide the bar,
+   keep the scrolling. Scoped, not global: desktop scrollbars stay usable. */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .marquee-left,
+  .marquee-right {
+    animation: none;
+  }
+
+  /* Without the animation the track is twice as wide as it needs to be;
+     let the user scroll it by hand instead. */
+  .marquee-viewport {
+    overflow-x: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://liloz95.github.io/LajolieClinic/sitemap.xml
