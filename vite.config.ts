@@ -1,12 +1,12 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import tailwindcss from '@tailwindcss/vite'
-import path from 'node:path'
+import { defineConfig } from "vite"
+import react from "@vitejs/plugin-react"
+import tailwindcss from "@tailwindcss/vite"
+import path from "node:path"
 
 // GitHub Pages serves a project site from https://<user>.github.io/<repo>/,
 // so every asset URL needs that sub-path prefix. Override with BASE_PATH=/
 // when moving to a custom domain or a <user>.github.io repo.
-const base = process.env.BASE_PATH ?? '/LajolieClinic/'
+const base = process.env.BASE_PATH ?? "/LajolieClinic/"
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -14,7 +14,7 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
-      '@': path.resolve(import.meta.dirname, './src'),
+      "@": path.resolve(import.meta.dirname, "./src"),
     },
   },
   build: {
@@ -23,11 +23,11 @@ export default defineConfig({
     assetsInlineLimit: 8192,
   },
   server: {
-    host: '0.0.0.0',
-    port: parseInt(process.env.PORT || '8443'),
+    host: "0.0.0.0",
+    port: parseInt(process.env.PORT || "8443"),
   },
   preview: {
-    host: '0.0.0.0',
-    port: parseInt(process.env.PORT || '8443'),
+    host: "0.0.0.0",
+    port: parseInt(process.env.PORT || "8443"),
   },
 })
