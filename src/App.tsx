@@ -36,8 +36,7 @@ const PHONE_DISPLAY = "076-069 81 31"
 const EMAIL = "lajolie.clinic@outlook.com"
 
 const OPENING_HOURS = [
-  { days: "Måndag", shortDays: "Mån", hours: "12:00–18:00" },
-  { days: "Tisdag–Fredag", shortDays: "Tis–Fre", hours: "10:00–18:00" },
+  { days: "Måndag–Fredag", shortDays: "Mån–Fre", hours: "10:00–18:00" },
   { days: "Lördag–Söndag", shortDays: "Lör–Sön", hours: "12:00–18:00" },
 ]
 
@@ -143,6 +142,7 @@ const TREATMENTS: {
       "Buttlift",
       "Cellulitbehandling",
       "Sklerosering",
+      "Intima korrigeringar",
     ],
     tone: "paper",
   },
@@ -170,7 +170,7 @@ const TREATMENTS: {
       "Ansiktsmassage",
       "Huvud- & nackmassage",
       "Vitamindropp",
-      "Intima behandlingar",
+      "Intim behandling",
       "BB Glow & Lips",
     ],
     tone: "warm",
@@ -537,7 +537,7 @@ function Results() {
         <SectionHeading
           id="results-title"
           eyebrow="Före och efter"
-          title="Resultat från La Jolie"
+          title="Resultat från vårt jobb"
           description="Utforska ett urval av behandlingar från La Jolie Clinic. Resultat är individuella och kan variera från person till person."
           light
         />

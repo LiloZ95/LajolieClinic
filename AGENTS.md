@@ -20,8 +20,11 @@ Deployment is GitHub Pages via GitHub Actions.
 - `src/App.tsx` — the entire site: data constants, `Header` state, sections
 - `src/icons.tsx` — the 20 Lucide icons used, inlined
 - `src/index.css` — font imports, Tailwind preflight, then the whole hand-written design
-- `src/assets/` — photography, imported as ES modules from `App.tsx`
-- `public/` — copied verbatim to `dist/`: `robots.txt`, `sitemap.xml`, `.nojekyll`
+- `src/assets/` — photography and the footer logo, imported as ES modules from
+  `App.tsx`
+- `public/` — copied verbatim to `dist/`: `robots.txt`, `sitemap.xml`,
+  `.nojekyll`, and the brand icons (`favicon-32.png`, `apple-touch-icon.png`,
+  `og-image.jpg`)
 - `vite.config.ts` — React + Tailwind plugins, `@` alias, GitHub Pages `base`
 - `.github/workflows/deploy.yml` — build and publish to GitHub Pages on push to `main`
 
@@ -32,6 +35,25 @@ serves project sites from a sub-path. Set `BASE_PATH=/` when moving to a custom
 domain or a `<user>.github.io` repo, and update the absolute URLs in
 `index.html` (canonical, OG, JSON-LD) plus `public/sitemap.xml` and
 `public/robots.txt` to match.
+
+`og:image`, `twitter:image` and the JSON-LD `logo`/`image` must stay **absolute**
+URLs — crawlers do not resolve relative paths. Vite rewrites the `base` prefix
+into `<link href>` but never into `<meta content>`, so those four are hand-written
+and need updating alongside the canonical URL.
+
+## Brand assets
+
+The master logo is 808x808 (black wordmark over gold glitter). Every icon in
+`public/` is derived from it with `sips`; regenerate them all if the logo
+changes, and keep the footer copy small — it renders at 48px:
+
+    sips -Z 32  master.png --out public/favicon-32.png
+    sips -Z 180 master.png --out public/apple-touch-icon.png
+    sips -s format jpeg -s formatOptions 90 master.png --out public/og-image.jpg
+    sips -Z 144 master.png --out src/assets/logo-avatar.png
+
+`og-image.jpg` doubles as the full-resolution master. The card is `summary`
+(square) rather than `summary_large_image`, which would need a 1200x630 crop.
 
 ## Conventions
 
