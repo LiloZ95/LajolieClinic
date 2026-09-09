@@ -21,13 +21,23 @@
       content="Estetiska behandlingar skräddarsydda efter dina önskemål. Legitimerad sjuksköterska i Malmö. 4,9 av 5 på Bokadirekt."
     />
     <meta property="og:url" content="https://liloz95.github.io/LajolieClinic/" />
-    <meta name="twitter:card" content="summary" />
-
-    <!-- Inline SVG monogram: no extra request, no binary asset in Git LFS. -->
-    <link
-      rel="icon"
-      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231c1710'/%3E%3Ctext x='16' y='22' font-family='Georgia,serif' font-size='16' font-style='italic' fill='%23c49068' text-anchor='middle'%3ELJ%3C/text%3E%3C/svg%3E"
+    <!-- Square logo pairs with the "summary" card; a landscape crop would need
+         "summary_large_image" and a 1200x630 asset. -->
+    <meta
+      property="og:image"
+      content="https://liloz95.github.io/LajolieClinic/og-image.jpg"
     />
+    <meta property="og:image:width" content="808" />
+    <meta property="og:image:height" content="808" />
+    <meta property="og:image:alt" content="La Jolie Clinic" />
+    <meta name="twitter:card" content="summary" />
+    <meta
+      name="twitter:image"
+      content="https://liloz95.github.io/LajolieClinic/og-image.jpg"
+    />
+
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -39,6 +49,8 @@
         "name": "La Jolie Clinic",
         "description": "Estetisk klinik i Malmö med injektioner, skinboosters, hudvård, trådlyft och kroppsbehandlingar.",
         "url": "https://liloz95.github.io/LajolieClinic/",
+        "logo": "https://liloz95.github.io/LajolieClinic/og-image.jpg",
+        "image": "https://liloz95.github.io/LajolieClinic/og-image.jpg",
         "telephone": "+46760698131",
         "priceRange": "$$",
         "address": {
@@ -78,13 +90,7 @@
         "openingHoursSpecification": [
           {
             "@type": "OpeningHoursSpecification",
-            "dayOfWeek": "Monday",
-            "opens": "12:00",
-            "closes": "18:00"
-          },
-          {
-            "@type": "OpeningHoursSpecification",
-            "dayOfWeek": ["Tuesday", "Wednesday", "Thursday", "Friday"],
+            "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
             "opens": "10:00",
             "closes": "18:00"
           },
