@@ -201,13 +201,35 @@ const CREDENTIALS = [
   "Försäkring via Folksam",
 ]
 
-function Wordmark({ light = false }: { light?: boolean }) {
+/**
+ * `logo` sits the avatar left of the two-line wordmark, inside the same anchor —
+ * one "home" link rather than two adjacent ones pointing at #top. The alt is
+ * empty because the anchor's aria-label already names the clinic.
+ */
+function Wordmark({
+  light = false,
+  logo = false,
+}: {
+  light?: boolean
+  logo?: boolean
+}) {
   return (
     <a
-      className={`wordmark ${light ? "wordmark--light" : ""}`}
+      className={`wordmark ${logo ? "wordmark--with-logo" : ""} ${
+        light ? "wordmark--light" : ""
+      }`}
       href="#top"
       aria-label="La Jolie Clinic, startsida"
     >
+      {logo ? (
+        <img
+          className="wordmark-logo"
+          src={logoAvatar}
+          alt=""
+          width="44"
+          height="44"
+        />
+      ) : null}
       <span>La Jolie</span>
       <small>Clinic</small>
     </a>
@@ -264,7 +286,7 @@ function Header() {
         className={`site-header ${scrolled ? "site-header--scrolled" : ""}`}
       >
         <div className="shell header-inner">
-          <Wordmark />
+          <Wordmark logo />
           <nav className="desktop-nav" aria-label="Huvudnavigation">
             {NAV_LINKS.map((link) => (
               <a key={link.href} href={link.href}>

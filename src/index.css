@@ -182,6 +182,36 @@ p {
   font-weight:600;
 }
 
+/* Header variant: avatar spans both text rows, so the wordmark keeps its
+   "La Jolie" over "CLINIC" stack instead of laying out in a single row. */
+.wordmark--with-logo {
+  grid-template-areas:"logo name"
+                      "logo clinic";
+  grid-template-columns:auto auto;
+  align-items:center;
+  column-gap:13px;
+  display:grid;
+}
+
+.wordmark--with-logo>span {
+  grid-area:name;
+  align-self:end;
+}
+
+.wordmark--with-logo>small {
+  grid-area:clinic;
+  align-self:start;
+}
+
+.wordmark-logo {
+  object-fit:cover;
+  border:1px solid var(--champagne);
+  border-radius:13px;
+  grid-area:logo;
+  width:44px;
+  height:44px;
+}
+
 .wordmark--light {
   color:var(--ivory);
 }
@@ -1760,6 +1790,14 @@ h1 em {
   .wordmark small {
     margin-top:.65rem;
     font-size:.52rem;
+  }
+  .wordmark--with-logo {
+    column-gap:10px;
+  }
+  .wordmark-logo {
+    border-radius:11px;
+    width:38px;
+    height:38px;
   }
   .mobile-menu {
     padding:118px 22px 24px;

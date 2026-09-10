@@ -20,7 +20,7 @@ Deployment is GitHub Pages via GitHub Actions.
 - `src/App.tsx` — the entire site: data constants, `Header` state, sections
 - `src/icons.tsx` — the 20 Lucide icons used, inlined
 - `src/index.css` — font imports, Tailwind preflight, then the whole hand-written design
-- `src/assets/` — photography and the footer logo, imported as ES modules from
+- `src/assets/` — photography and the logo avatar, imported as ES modules from
   `App.tsx`
 - `public/` — copied verbatim to `dist/`: `robots.txt`, `sitemap.xml`,
   `.nojekyll`, and the brand icons (`favicon-32.png`, `apple-touch-icon.png`,
@@ -45,7 +45,8 @@ and need updating alongside the canonical URL.
 
 The master logo is 808x808 (black wordmark over gold glitter). Every icon in
 `public/` is derived from it with `sips`; regenerate them all if the logo
-changes, and keep the footer copy small — it renders at 48px:
+changes, and keep the in-page copy small — it renders at 44px in the header
+(`<Wordmark logo />`) and 46px in the footer:
 
     sips -Z 32  master.png --out public/favicon-32.png
     sips -Z 180 master.png --out public/apple-touch-icon.png
