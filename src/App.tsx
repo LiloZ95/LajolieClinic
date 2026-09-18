@@ -236,6 +236,23 @@ function Wordmark({
   )
 }
 
+/**
+ * The calligraphic swash from the banner logo, redrawn as a section rule.
+ * Scales proportionally (no preserveAspectRatio override) so the end loop
+ * stays round instead of stretching into an ellipse on wide viewports.
+ */
+function Flourish({ className = "" }: { className?: string }) {
+  return (
+    <svg
+      className={`flourish ${className}`.trim()}
+      viewBox="0 0 1000 48"
+      aria-hidden="true"
+    >
+      <path d="M34 32C16 32 14 12 34 12c18 0 18 24-6 28-16 2-22-9-6-16 58-22 148-20 243-9 80 9 145 18 207 15 14-1 22-3 28-6 6-3 15-5 28-6 82-5 162 4 247 14 95 11 170 8 221-10" />
+    </svg>
+  )
+}
+
 function Header() {
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
@@ -564,6 +581,8 @@ function Results() {
           light
         />
 
+        <Flourish className="flourish--light flourish--results" />
+
         <div className="result-grid">
           <figure className="result-card result-card--lashes">
             <div className="comparison-frame comparison-frame--vertical">
@@ -840,6 +859,9 @@ function Contact() {
 function Footer() {
   return (
     <footer className="footer">
+      <div className="shell">
+        <Flourish className="flourish--footer" />
+      </div>
       <div className="shell footer-inner">
         <div className="footer-brand">
           <img
