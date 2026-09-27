@@ -3,10 +3,10 @@ import react from "@vitejs/plugin-react"
 import tailwindcss from "@tailwindcss/vite"
 import path from "node:path"
 
-// GitHub Pages serves a project site from https://<user>.github.io/<repo>/,
-// so every asset URL needs that sub-path prefix. Override with BASE_PATH=/
-// when moving to a custom domain or a <user>.github.io repo.
-const base = process.env.BASE_PATH ?? "/LajolieClinic/"
+// The site is served from the root of its custom domain, https://lajolieclinic.se/.
+// Override with BASE_PATH=/LajolieClinic/ to serve it from the GitHub Pages
+// project sub-path (https://<user>.github.io/<repo>/) instead.
+const base = process.env.BASE_PATH ?? "/"
 
 // https://vitejs.dev/config/
 export default defineConfig({
