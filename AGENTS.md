@@ -32,11 +32,15 @@ Deployment is GitHub Pages via GitHub Actions.
 
 ## Deployment
 
-`base` in `vite.config.ts` defaults to `/LajolieClinic/` because GitHub Pages
-serves project sites from a sub-path. Set `BASE_PATH=/` when moving to a custom
-domain or a `<user>.github.io` repo, and update the absolute URLs in
-`index.html` (canonical, OG, JSON-LD) plus `public/sitemap.xml` and
-`public/robots.txt` to match.
+The site is served from the custom domain **https://lajolieclinic.se/**
+(registered at GoDaddy; apex A records point at GitHub Pages, `www` is a CNAME
+to `liloz95.github.io`). The domain is set in the repo's Settings → Pages, not
+by a `CNAME` file — the Actions deploy ignores one.
+
+`base` in `vite.config.ts` therefore defaults to `/`. If the domain is ever
+dropped, set `BASE_PATH=/LajolieClinic/` (GitHub Pages serves project sites from
+a sub-path) and update the absolute URLs in `index.html` (canonical, OG,
+JSON-LD) plus `public/sitemap.xml` and `public/robots.txt` to match.
 
 `og:image`, `twitter:image` and the JSON-LD `logo`/`image` must stay **absolute**
 URLs — crawlers do not resolve relative paths. Vite rewrites the `base` prefix
