@@ -30,7 +30,8 @@ import {
 
 const BOKADIREKT_URL = "https://www.bokadirekt.se/places/la-jolie-clinic-37459"
 const INSTAGRAM_URL = "https://www.instagram.com/lajolieclinic/"
-const MAPS_URL = "https://maps.app.goo.gl/5qKQvd4gZvkFUo6L6"
+const MAPS_URL =
+  "https://www.google.com/maps/search/?api=1&query=Hanssons+v%C3%A4g+52%2C+Malm%C3%B6"
 const PHONE_RAW = "0760698131"
 const PHONE_DISPLAY = "076-069 81 31"
 const EMAIL = "lajolie.clinic@outlook.com"
@@ -289,8 +290,8 @@ function Header() {
       <div className="utility-bar">
         <div className="shell utility-inner">
           <span>
-            <MapPin size={13} strokeWidth={1.7} aria-hidden="true" /> Derbyvägen
-            30, Malmö
+            <MapPin size={13} strokeWidth={1.7} aria-hidden="true" /> Hanssons
+            väg 52, Malmö
           </span>
           <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer">
             <Instagram size={13} strokeWidth={1.7} aria-hidden="true" /> Följ La
@@ -370,7 +371,7 @@ function Header() {
               Boka tid
             </a>
             <div className="mobile-menu-meta">
-              <span>Derbyvägen 30, Malmö</span>
+              <span>Hanssons väg 52, Malmö</span>
               <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer">
                 <Instagram size={15} aria-hidden="true" /> Instagram
               </a>
@@ -794,9 +795,9 @@ function Contact() {
           >
             <MapPin size={18} strokeWidth={1.7} aria-hidden="true" />
             <span>
-              Derbyvägen 30
+              Hanssons väg 52
               <br />
-              <small>212 35 Malmö</small>
+              <small>Malmö</small>
             </span>
             <ArrowUpRight size={17} strokeWidth={1.7} aria-hidden="true" />
           </a>
