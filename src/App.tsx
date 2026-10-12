@@ -1,30 +1,20 @@
 import { useEffect, useState } from "react"
-import type { ComponentType, ReactNode } from "react"
+import type { ReactNode } from "react"
 
 import heroClinic from "./assets/lajolie-hero-clinic.png"
 import lashBeforeAfter from "./assets/lash-before-after.png"
-import logoAvatar from "./assets/logo-avatar.png"
+import logoBanner from "./assets/logo-banner.jpg"
+import logoSeal from "./assets/logo-seal.jpg"
+import logoWordmark from "./assets/logo-wordmark.jpg"
 import profileBeforeAfter from "./assets/profile-before-after.png"
 import {
-  Activity,
-  ArrowDownRight,
   ArrowUpRight,
   CalendarDays,
-  Check,
-  Clock3,
-  Droplets,
-  Eye,
-  HeartPulse,
   Instagram,
   Mail,
-  MapPin,
   Menu,
   Phone,
-  ScanFace,
-  Sparkles,
   Star,
-  Syringe,
-  Waves,
   X,
 } from "./icons"
 
@@ -35,34 +25,37 @@ const MAPS_URL =
 const PHONE_RAW = "0760698131"
 const PHONE_DISPLAY = "076-069 81 31"
 const EMAIL = "lajolie.clinic@outlook.com"
+const STREET = "Hanssons väg 52"
+const CITY = "Malmö"
+
+/** Bokadirekt figures. The non-breaking space keeps "1 939" on one line. */
+const RATING = { score: "4,9", reviews: "1 939" }
 
 const OPENING_HOURS = [
-  { days: "Måndag–Fredag", shortDays: "Mån–Fre", hours: "10:00–18:00" },
-  { days: "Lördag–Söndag", shortDays: "Lör–Sön", hours: "12:00–18:00" },
+  { days: "Måndag–fredag", hours: "10–18" },
+  { days: "Lördag–söndag", hours: "12–18" },
 ]
 
-/** Single source of truth for the header, mobile menu and their anchors. */
+/**
+ * Single source of truth for the header, mobile menu, footer and their
+ * anchors. Order follows the sections on the page.
+ */
 const NAV_LINKS = [
+  { label: "Om oss", href: "#om-oss" },
   { label: "Behandlingar", href: "#behandlingar" },
   { label: "Resultat", href: "#resultat" },
-  { label: "Om oss", href: "#om-oss" },
   { label: "Kontakt", href: "#kontakt" },
 ]
 
-type Tone = "paper" | "warm" | "ink"
-
 const TREATMENTS: {
-  focus: string
   title: string
   description: string
   services: string[]
-  tone: Tone
 }[] = [
   {
-    focus: "Injektioner",
-    title: "Injektion & form",
+    title: "Injektionsbehandlingar",
     description:
-      "Individuellt planerade behandlingar där proportioner, uttryck och dina önskemål står i centrum.",
+      "Planeras utifrån ansiktets proportioner, det du vill förändra och lika mycket det du vill behålla.",
     services: [
       "Fillers",
       "Botox",
@@ -71,13 +64,11 @@ const TREATMENTS: {
       "HarmonyCa",
       "Radiesse",
     ],
-    tone: "paper",
   },
   {
-    focus: "Hudkvalitet",
-    title: "Biostimulering & skinboosters",
+    title: "Skinboosters & biostimulering",
     description:
-      "Ett brett urval för hudkvalitet och återfuktning, valt efter hudens förutsättningar.",
+      "För återfuktning och hudkvalitet. Preparatet väljs efter hudtyp och vad du vill uppnå.",
     services: [
       "Skinbooster",
       "Profhilo",
@@ -86,13 +77,11 @@ const TREATMENTS: {
       "Mesoterapi",
       "Lax DNA (PDRN)",
     ],
-    tone: "warm",
   },
   {
-    focus: "Hudvård",
-    title: "Glow, peeling & hudföryngring",
+    title: "Ansiktsbehandlingar & peeling",
     description:
-      "Kombinationsbehandlingar för rengöring, exfoliering, lyster och en jämnare hudkänsla.",
+      "Rengöring, exfoliering och lyster – som en enskild behandling eller som del av en längre plan.",
     services: [
       "Ansiktsbehandling",
       "Diamond Glow",
@@ -101,13 +90,11 @@ const TREATMENTS: {
       "PRX-T33",
       "Kemisk peeling",
     ],
-    tone: "paper",
   },
   {
-    focus: "Hud & hår",
-    title: "PRP, PRF & hårvård",
+    title: "PRP, PRF & hårbotten",
     description:
-      "Behandlingar för hud och hårbotten som planeras utifrån område och individuella behov.",
+      "Behandlingar för hud och hårbotten, flera av dem baserade på ditt eget blod.",
     services: [
       "PRP hudbooster",
       "PRF",
@@ -115,13 +102,11 @@ const TREATMENTS: {
       "Pink HL",
       "RRS XL Hair",
     ],
-    tone: "ink",
   },
   {
-    focus: "Struktur",
-    title: "Lyft, hudstruktur & ärr",
+    title: "Trådlyft & hudstruktur",
     description:
-      "Tekniker för utvalda områden som alltid föregås av en personlig konsultation och bedömning.",
+      "Lyft, hudstruktur och ärr. Föregås alltid av en konsultation där vi bedömer om behandlingen passar dig.",
     services: [
       "Trådlyft",
       "Kollagentrådar",
@@ -129,13 +114,11 @@ const TREATMENTS: {
       "Ögonlockslyft",
       "Cutting-teknik för ärr",
     ],
-    tone: "warm",
   },
   {
-    focus: "Kropp",
-    title: "Kropp & kontur",
+    title: "Kroppsbehandlingar",
     description:
-      "Områdesanpassade behandlingar för kropp, silhuett och hudens struktur.",
+      "Behandlingar för kroppens kontur och hudens struktur, anpassade efter område.",
     services: [
       "Fettreducering",
       "Kavitation",
@@ -145,13 +128,11 @@ const TREATMENTS: {
       "Sklerosering",
       "Intima korrigeringar",
     ],
-    tone: "paper",
   },
   {
-    focus: "Fransar & bryn",
-    title: "Inramning med precision",
+    title: "Fransar & ögonbryn",
     description:
-      "Form, färg och förlängning anpassas för att framhäva ögon och ansiktsdrag på ett personligt sätt.",
+      "Lyft, förlängning, färg och form, anpassat efter dina ögon och ditt ansikte.",
     services: [
       "Fransförlängning",
       "Lashlift",
@@ -160,13 +141,11 @@ const TREATMENTS: {
       "Färgning",
       "Trådning",
     ],
-    tone: "paper",
   },
   {
-    focus: "Välmående",
-    title: "Massage & specialbehandlingar",
+    title: "Massage & välmående",
     description:
-      "Ett kompletterande utbud med avkopplande behandlingar och särskilda bokningsområden.",
+      "Avkopplande behandlingar och specialbehandlingar, för sig eller som komplement.",
     services: [
       "Ansiktsmassage",
       "Huvud- & nackmassage",
@@ -174,106 +153,73 @@ const TREATMENTS: {
       "Intim behandling",
       "BB Glow & Lips",
     ],
-    tone: "warm",
   },
 ]
-
-/** Positional: index N decorates TREATMENTS[N]. */
-const TREATMENT_ICONS: ComponentType<{
-  size?: number
-  strokeWidth?: number
-  "aria-hidden"?: "true"
-}>[] = [Syringe, Droplets, Sparkles, Activity, ScanFace, Waves, Eye, HeartPulse]
 
 const TEAM = [
   { name: "Bouchra Itani", role: "Legitimerad sjuksköterska" },
   { name: "Raiana Itani", role: "Undersköterska" },
 ]
 
-const VALUES = [
-  "Personligt anpassat",
-  "Tryggt bemötande",
-  "Brett behandlingsutbud",
+const PRINCIPLES = [
+  {
+    numeral: "I",
+    title: "Planerat efter dig",
+    text: "Varje behandling utgår från dina önskemål, din hud och dina proportioner, inte från en standardmall.",
+  },
+  {
+    numeral: "II",
+    title: "Trygghet i varje steg",
+    text: "Legitimerad sjuksköterska, läkare ansluten till kliniken och försäkring via Folksam.",
+  },
+  {
+    numeral: "III",
+    title: "Allt under ett tak",
+    text: "Injektioner, hudvård, fransar och kroppsbehandlingar på samma klinik, så att flera behandlingar kan planeras som en helhet.",
+  },
 ]
 
-const CREDENTIALS = [
-  "Leg. sjuksköterska",
-  "Läkare ansluten",
-  "Försäkring via Folksam",
+const BOOKING_STEPS = [
+  { title: "Välj behandling", text: "Bläddra bland behandlingar och priser" },
+  { title: "Välj en tid", text: "Se lediga tider direkt i kalendern" },
+  { title: "Bekräfta", text: "Du får en bekräftelse från Bokadirekt" },
 ]
 
-/**
- * `logo` sits the avatar left of the two-line wordmark, inside the same anchor —
- * one "home" link rather than two adjacent ones pointing at #top. The alt is
- * empty because the anchor's aria-label already names the clinic.
- */
-function Wordmark({
+function Stars({ size = 15 }: { size?: number }) {
+  return (
+    <span className="stars" aria-hidden="true">
+      {Array.from({ length: 5 }, (_, index) => (
+        <Star key={index} size={size} fill="currentColor" strokeWidth={1.2} />
+      ))}
+    </span>
+  )
+}
+
+function Kicker({
+  children,
   light = false,
-  logo = false,
 }: {
+  children: ReactNode
   light?: boolean
-  logo?: boolean
 }) {
-  return (
-    <a
-      className={`wordmark ${logo ? "wordmark--with-logo" : ""} ${
-        light ? "wordmark--light" : ""
-      }`}
-      href="#top"
-      aria-label="La Jolie Clinic, startsida"
-    >
-      {logo ? (
-        <img
-          className="wordmark-logo"
-          src={logoAvatar}
-          alt=""
-          width="44"
-          height="44"
-        />
-      ) : null}
-      <span>La Jolie</span>
-      <small>Clinic</small>
-    </a>
-  )
+  return <p className={`kicker ${light ? "kicker--light" : ""}`}>{children}</p>
 }
 
-/**
- * The calligraphic swash from the banner logo, redrawn as a section rule.
- * Scales proportionally (no preserveAspectRatio override) so the end loop
- * stays round instead of stretching into an ellipse on wide viewports.
- */
-function Flourish({ className = "" }: { className?: string }) {
-  return (
-    <svg
-      className={`flourish ${className}`.trim()}
-      viewBox="0 0 1000 48"
-      aria-hidden="true"
-    >
-      <path d="M34 32C16 32 14 12 34 12c18 0 18 24-6 28-16 2-22-9-6-16 58-22 148-20 243-9 80 9 145 18 207 15 14-1 22-3 28-6 6-3 15-5 28-6 82-5 162 4 247 14 95 11 170 8 221-10" />
-    </svg>
-  )
-}
-
-function Header() {
+function Masthead() {
   const [open, setOpen] = useState(false)
-  const [scrolled, setScrolled] = useState(false)
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 16)
-    onScroll()
-    window.addEventListener("scroll", onScroll, { passive: true })
-    return () => window.removeEventListener("scroll", onScroll)
-  }, [])
+    if (!open) return
 
-  useEffect(() => {
     const previousOverflow = document.body.style.overflow
-    document.body.style.overflow = open ? "hidden" : previousOverflow
+    document.body.style.overflow = "hidden"
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") setOpen(false)
     }
+    // Matches the 1060px breakpoint where the menu button disappears.
     const onResize = () => {
-      if (window.innerWidth > 900) setOpen(false)
+      if (window.innerWidth > 1060) setOpen(false)
     }
 
     window.addEventListener("keydown", onKeyDown)
@@ -286,281 +232,280 @@ function Header() {
   }, [open])
 
   return (
-    <>
-      <div className="utility-bar">
-        <div className="shell utility-inner">
-          <span>
-            <MapPin size={13} strokeWidth={1.7} aria-hidden="true" /> Hanssons
-            väg 52, Malmö
-          </span>
-          <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer">
-            <Instagram size={13} strokeWidth={1.7} aria-hidden="true" /> Följ La
-            Jolie
-          </a>
-        </div>
-      </div>
+    <header className="masthead">
+      <div className="shell masthead-inner">
+        <nav className="masthead-nav" aria-label="Huvudmeny">
+          {NAV_LINKS.map((link) => (
+            <a key={link.href} href={link.href}>
+              {link.label}
+            </a>
+          ))}
+        </nav>
 
-      <header
-        className={`site-header ${scrolled ? "site-header--scrolled" : ""}`}
-      >
-        <div className="shell header-inner">
-          <Wordmark logo />
-          <nav className="desktop-nav" aria-label="Huvudnavigation">
-            {NAV_LINKS.map((link) => (
-              <a key={link.href} href={link.href}>
-                {link.label}
-              </a>
-            ))}
-          </nav>
+        <a
+          className="brand"
+          href="#top"
+          aria-label="La Jolie Clinic, startsida"
+        >
+          <img src={logoWordmark} alt="" width="380" height="140" />
+        </a>
+
+        <div className="masthead-end">
+          <a className="masthead-phone" href={`tel:${PHONE_RAW}`}>
+            <Phone size={15} strokeWidth={1.6} aria-hidden="true" />
+            {PHONE_DISPLAY}
+          </a>
           <a
-            className="button button--dark header-book"
+            className="btn btn--gold btn--compact"
             href={BOKADIREKT_URL}
             target="_blank"
             rel="noreferrer"
           >
-            <CalendarDays size={16} strokeWidth={1.8} aria-hidden="true" />
             Boka tid
           </a>
-          <button
-            className="menu-toggle"
-            type="button"
-            aria-label={open ? "Stäng meny" : "Öppna meny"}
-            aria-expanded={open}
-            aria-controls="mobile-menu"
-            onClick={() => setOpen((value) => !value)}
-          >
-            {open ? (
-              <X size={23} strokeWidth={1.7} aria-hidden="true" />
-            ) : (
-              <Menu size={23} strokeWidth={1.7} aria-hidden="true" />
-            )}
-          </button>
         </div>
-      </header>
+
+        <button
+          className="menu-button"
+          type="button"
+          aria-label={open ? "Stäng meny" : "Öppna meny"}
+          aria-expanded={open}
+          aria-controls="menu-panel"
+          onClick={() => setOpen((value) => !value)}
+        >
+          {open ? (
+            <X size={22} strokeWidth={1.6} aria-hidden="true" />
+          ) : (
+            <Menu size={22} strokeWidth={1.6} aria-hidden="true" />
+          )}
+        </button>
+      </div>
 
       {open ? (
-        <div className="mobile-menu-layer">
+        <>
           <button
-            className="mobile-menu-backdrop"
+            className="menu-scrim"
             type="button"
             aria-label="Stäng meny"
+            tabIndex={-1}
             onClick={() => setOpen(false)}
           />
-          <nav
-            id="mobile-menu"
-            className="mobile-menu"
-            aria-label="Mobilnavigation"
-          >
-            <p>Meny</p>
-            {NAV_LINKS.map((link) => (
+          <nav id="menu-panel" className="menu-panel" aria-label="Mobilmeny">
+            {NAV_LINKS.map((link, index) => (
               <a
                 key={link.href}
+                className="menu-link"
                 href={link.href}
                 onClick={() => setOpen(false)}
               >
+                <span>{String(index + 1).padStart(2, "0")}</span>
                 {link.label}
               </a>
             ))}
             <a
-              className="button button--gold"
+              className="btn btn--cocoa menu-book"
               href={BOKADIREKT_URL}
               target="_blank"
               rel="noreferrer"
             >
-              <CalendarDays size={17} strokeWidth={1.8} aria-hidden="true" />
+              <CalendarDays size={17} strokeWidth={1.6} aria-hidden="true" />
               Boka tid
             </a>
-            <div className="mobile-menu-meta">
-              <span>Hanssons väg 52, Malmö</span>
+            <div className="menu-meta">
+              <a href={`tel:${PHONE_RAW}`}>
+                <Phone size={15} strokeWidth={1.6} aria-hidden="true" />
+                {PHONE_DISPLAY}
+              </a>
               <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer">
-                <Instagram size={15} aria-hidden="true" /> Instagram
+                <Instagram size={15} strokeWidth={1.6} aria-hidden="true" />
+                Instagram
               </a>
             </div>
           </nav>
-        </div>
+        </>
       ) : null}
-    </>
+    </header>
   )
 }
 
-/** Decorative ribbon strokes behind the hero, treatments and trust sections. */
-function FlowLines({ className = "" }: { className?: string }) {
+function Opening() {
   return (
-    <svg
-      className={`flow-lines ${className}`.trim()}
-      viewBox="0 0 1200 520"
-      fill="none"
-      preserveAspectRatio="none"
-      aria-hidden="true"
-    >
-      <path d="M-84 414C132 390 184 82 454 116C704 147 721 438 972 374C1120 336 1194 222 1290 272" />
-      <path d="M-96 448C142 421 204 120 470 151C707 179 732 446 982 390C1134 356 1207 251 1302 298" />
-      <path d="M-112 483C154 452 226 160 488 186C711 208 747 453 994 406C1149 376 1220 280 1316 325" />
-      <path d="M-132 520C167 484 250 202 508 222C718 238 763 461 1008 423C1167 398 1236 312 1332 352" />
-    </svg>
-  )
-}
-
-function Hero() {
-  return (
-    <section className="hero" aria-labelledby="hero-title">
-      <div className="shell hero-frame">
-        <FlowLines className="flow-lines--hero" />
-
-        <div className="hero-copy">
-          <p className="eyebrow">Estetiska behandlingar i Malmö</p>
-          <h1 id="hero-title">
-            <span>Skönhet med precision,</span>
-            <span>
-              <em>trygghet</em> och känsla
-            </span>
-          </h1>
-          <p className="hero-lead">
-            Personligt anpassade estetiska behandlingar med fokus på trygghet,
-            kvalitet och ett resultat som känns rätt för dig.
+    <section className="opening" aria-labelledby="opening-title">
+      <div className="shell opening-grid">
+        <div className="opening-copy">
+          <Kicker light>Estetisk klinik i {CITY}</Kicker>
+          <h1 id="opening-title">Förfina det som redan är ditt</h1>
+          <p className="opening-lead">
+            Injektioner, skinboosters, hudvård, fransar och kroppsbehandlingar
+            på Hanssons väg i {CITY}. Vi börjar alltid med att lyssna och
+            planerar sedan behandlingen tillsammans med dig.
           </p>
-          <div className="button-row">
+          <div className="opening-actions">
             <a
-              className="button button--dark"
+              className="btn btn--gold"
               href={BOKADIREKT_URL}
               target="_blank"
               rel="noreferrer"
             >
-              <CalendarDays size={17} strokeWidth={1.8} aria-hidden="true" />
               Boka tid
+              <ArrowUpRight size={16} strokeWidth={1.6} aria-hidden="true" />
             </a>
-            <a className="text-link" href="#resultat">
-              Se resultat{" "}
-              <ArrowDownRight size={17} strokeWidth={1.7} aria-hidden="true" />
+            <a className="btn btn--line-light" href="#behandlingar">
+              Vad vi erbjuder
             </a>
           </div>
-        </div>
-
-        <div className="hero-visual">
-          <img
-            className="hero-photo"
-            src={heroClinic}
-            alt="Ljust och rofyllt behandlingsrum i skandinavisk stil"
-          />
-          <div className="hero-location">
-            La Jolie Clinic <span>Malmö</span>
-          </div>
-          <div className="hero-rating-card">
-            <Star
-              size={18}
-              fill="currentColor"
-              strokeWidth={1.5}
-              aria-hidden="true"
-            />
-            <div>
-              <strong>4,9 av 5</strong>
-              <span>1 939 betyg på Bokadirekt</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="hero-proof" aria-label="Trygghet och kompetens">
-          {CREDENTIALS.map((credential) => (
-            <span key={credential}>
-              <Check size={14} strokeWidth={2} aria-hidden="true" />{" "}
-              {credential}
+          <p className="opening-rating">
+            <Stars />
+            <span>
+              <strong>{RATING.score} av 5</strong> från {RATING.reviews} betyg
+              på Bokadirekt
             </span>
-          ))}
+          </p>
         </div>
+
+        <figure className="opening-visual">
+          <div className="opening-arch">
+            <img
+              src={heroClinic}
+              alt="Behandlingsbrits i ett ljust, stilla rum"
+              width="1086"
+              height="1448"
+            />
+          </div>
+          <img
+            className="opening-seal"
+            src={logoSeal}
+            alt=""
+            width="130"
+            height="130"
+          />
+        </figure>
       </div>
     </section>
   )
 }
 
-function SectionHeading({
-  id,
-  eyebrow,
-  title,
-  description,
-  light = false,
-}: {
-  id: string
-  eyebrow: string
-  title: string
-  description?: string
-  light?: boolean
-}) {
+function Clinic() {
   return (
-    <div className={`section-heading ${light ? "section-heading--light" : ""}`}>
-      <p className="eyebrow">{eyebrow}</p>
-      <h2 id={id}>{title}</h2>
-      {description ? (
-        <p className="section-description">{description}</p>
-      ) : null}
-    </div>
+    <section className="clinic" id="om-oss" aria-labelledby="clinic-title">
+      <div className="shell clinic-grid">
+        <div>
+          <Kicker>Om oss</Kicker>
+          <h2 id="clinic-title">Kliniken bakom namnet</h2>
+          <p className="clinic-lead">
+            La Jolie drivs av systrarna Bouchra och Raiana Itani. Här möter du
+            samma två ansikten från första frågan till färdig behandling – och
+            ingenting stressas fram.
+          </p>
+          <ul className="team" aria-label="Teamet">
+            {TEAM.map((member) => (
+              <li key={member.name}>
+                <span className="team-initial" aria-hidden="true">
+                  {member.name.charAt(0)}
+                </span>
+                <span>
+                  <strong>{member.name}</strong>
+                  <small>{member.role}</small>
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <ol className="principles" aria-label="Så arbetar vi">
+          {PRINCIPLES.map((principle) => (
+            <li key={principle.title}>
+              <span className="principle-numeral" aria-hidden="true">
+                {principle.numeral}
+              </span>
+              <div>
+                <h3>{principle.title}</h3>
+                <p>{principle.text}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
   )
 }
 
-function Treatments() {
+function Services() {
   return (
     <section
-      className="treatments section-light"
+      className="services"
       id="behandlingar"
-      aria-labelledby="treatments-title"
+      aria-labelledby="services-title"
     >
-      <FlowLines className="flow-lines--treatments" />
-      <div className="shell">
-        <div className="section-intro">
-          <SectionHeading
-            id="treatments-title"
-            eyebrow="Behandlingar"
-            title="Ett brett utbud, samlat med omsorg"
-          />
+      <div className="shell services-grid">
+        <div className="services-aside">
+          <Kicker>Behandlingar</Kicker>
+          <h2 id="services-title">Från injektioner till välmående</h2>
           <p>
-            Utforska klinikens behandlingsområden. Exakt behandling väljs
-            tillsammans med kliniken utifrån dina önskemål och förutsättningar.
+            Här ser du klinikens behandlingsområden i korthet. Vilken behandling
+            som passar dig avgör vi tillsammans – aktuella priser och lediga
+            tider finns på Bokadirekt.
           </p>
-        </div>
-
-        <div className="treatment-grid">
-          {TREATMENTS.map((treatment, index) => {
-            const Icon = TREATMENT_ICONS[index]
-            return (
-              <article
-                key={treatment.title}
-                className={`treatment-card treatment-card--${treatment.tone}`}
-              >
-                <div className="treatment-card-top">
-                  <span className="treatment-icon">
-                    <Icon size={19} strokeWidth={1.45} aria-hidden="true" />
-                  </span>
-                  <span className="treatment-focus">{treatment.focus}</span>
-                </div>
-                <h3>{treatment.title}</h3>
-                <p>{treatment.description}</p>
-                <ul
-                  className="treatment-services"
-                  aria-label={`${treatment.title}, exempel på behandlingar`}
-                >
-                  {treatment.services.map((service) => (
-                    <li key={service}>{service}</li>
-                  ))}
-                </ul>
-              </article>
-            )
-          })}
-        </div>
-
-        <div className="section-action">
-          <span>
-            Aktuella varianter, konsultationer och priser uppdateras löpande på
-            Bokadirekt.
-          </span>
           <a
-            className="section-text-link"
+            className="link-arrow"
             href={BOKADIREKT_URL}
             target="_blank"
             rel="noreferrer"
           >
-            Se hela utbudet
-            <ArrowUpRight size={17} strokeWidth={1.7} aria-hidden="true" />
+            Priser och tider
+            <ArrowUpRight size={15} strokeWidth={1.6} aria-hidden="true" />
           </a>
         </div>
+
+        <ol className="services-list">
+          {TREATMENTS.map((treatment, index) => (
+            <li key={treatment.title} className="service">
+              <span className="service-number" aria-hidden="true">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              <div className="service-body">
+                <h3>{treatment.title}</h3>
+                <p>{treatment.description}</p>
+              </div>
+              <ul
+                className="service-items"
+                aria-label={`${treatment.title}, exempel på behandlingar`}
+              >
+                {treatment.services.map((service) => (
+                  <li key={service}>{service}</li>
+                ))}
+              </ul>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+  )
+}
+
+function Verdict() {
+  return (
+    <section className="verdict" aria-label="Kundbetyg">
+      <div className="shell verdict-inner">
+        <p className="verdict-score">
+          <span>
+            {RATING.score}
+            <small>av 5</small>
+          </span>
+        </p>
+        <Stars size={18} />
+        <p className="verdict-text">
+          Snittbetyg från {RATING.reviews} kundomdömen på Bokadirekt
+        </p>
+        <a
+          className="link-arrow link-arrow--light"
+          href={BOKADIREKT_URL}
+          target="_blank"
+          rel="noreferrer"
+        >
+          Läs omdömena
+          <ArrowUpRight size={15} strokeWidth={1.6} aria-hidden="true" />
+        </a>
       </div>
     </section>
   )
@@ -568,334 +513,202 @@ function Treatments() {
 
 function Results() {
   return (
-    <section
-      className="results section-dark"
-      id="resultat"
-      aria-labelledby="results-title"
-    >
+    <section className="results" id="resultat" aria-labelledby="results-title">
       <div className="shell">
-        <SectionHeading
-          id="results-title"
-          eyebrow="Före och efter"
-          title="Resultat från vårt jobb"
-          description="Utforska ett urval av behandlingar från La Jolie Clinic. Resultat är individuella och kan variera från person till person."
-          light
-        />
+        <div className="results-head">
+          <Kicker>Resultat</Kicker>
+          <h2 id="results-title">Så här kan det se ut</h2>
+          <p>
+            Bilderna visar enskilda kunders behandlingar på kliniken. Resultat
+            är individuella och varierar från person till person.
+          </p>
+        </div>
 
-        <Flourish className="flourish--light flourish--results" />
-
-        <div className="result-grid">
-          <figure className="result-card result-card--lashes">
-            <div className="comparison-frame comparison-frame--vertical">
+        <div className="results-pair">
+          <figure className="result result--stacked">
+            <div className="result-frame">
               <img
                 src={lashBeforeAfter}
-                alt="Före och efter lashbehandling, visat överst och nederst"
+                alt="Ögon före och efter fransbehandling, före överst och efter nederst"
+                width="1254"
+                height="1254"
                 loading="lazy"
               />
-              <span className="comparison-label comparison-label--top">
-                Före
-              </span>
-              <span className="comparison-label comparison-label--bottom">
-                Efter
-              </span>
+              <span className="result-tag result-tag--before">Före</span>
+              <span className="result-tag result-tag--after">Efter</span>
             </div>
             <figcaption>
-              <strong>Lash result</strong>
+              <span>01</span> Fransbehandling
             </figcaption>
           </figure>
 
-          <figure className="result-card result-card--profile">
-            <div className="comparison-frame comparison-frame--horizontal">
+          <figure className="result result--side">
+            <div className="result-frame">
               <img
                 src={profileBeforeAfter}
-                alt="Före och efter profilbehandling, visat till vänster och höger"
+                alt="Profil före och efter behandling, före till vänster och efter till höger"
+                width="1254"
+                height="1254"
                 loading="lazy"
               />
-              <span className="comparison-label comparison-label--left">
-                Före
-              </span>
-              <span className="comparison-label comparison-label--right">
-                Efter
-              </span>
+              <span className="result-tag result-tag--before">Före</span>
+              <span className="result-tag result-tag--after">Efter</span>
             </div>
             <figcaption>
-              <strong>Profile result</strong>
+              <span>02</span> Profilbehandling
             </figcaption>
           </figure>
         </div>
 
         <a
-          className="results-link"
+          className="btn btn--line results-more"
           href={INSTAGRAM_URL}
           target="_blank"
           rel="noreferrer"
         >
-          <span>
-            <Instagram size={20} strokeWidth={1.7} aria-hidden="true" /> Se fler
-            resultat på Instagram
-          </span>
-          <ArrowUpRight size={21} strokeWidth={1.7} aria-hidden="true" />
+          <Instagram size={16} strokeWidth={1.6} aria-hidden="true" />
+          Fler resultat på Instagram
         </a>
       </div>
     </section>
   )
 }
 
-function About() {
+function Visit() {
   return (
-    <section className="about" id="om-oss" aria-labelledby="about-title">
-      <div className="shell about-grid">
-        <div className="about-heading-wrap">
-          <SectionHeading
-            id="about-title"
-            eyebrow="Om La Jolie"
-            title="Två systrar med fokus på dig"
-          />
-          <aside
-            className="about-details"
-            aria-label="Kontakt och ordinarie öppettider"
-          >
-            <div className="about-contact-links">
-              <a href={`tel:${PHONE_RAW}`}>
-                <span className="about-detail-icon">
-                  <Phone size={17} strokeWidth={1.7} aria-hidden="true" />
-                </span>
-                <span>
-                  <small>Telefon</small>
-                  <strong>{PHONE_DISPLAY}</strong>
-                </span>
-              </a>
-              <a href={`mailto:${EMAIL}`}>
-                <span className="about-detail-icon">
-                  <Mail size={17} strokeWidth={1.7} aria-hidden="true" />
-                </span>
-                <span>
-                  <small>E-post</small>
-                  <strong>{EMAIL}</strong>
-                </span>
-              </a>
-            </div>
-
-            <div className="opening-hours">
-              <div className="opening-hours-heading">
-                <Clock3 size={16} strokeWidth={1.7} aria-hidden="true" />
-                <span>Ordinarie öppettider</span>
-              </div>
-              <dl>
-                {OPENING_HOURS.map((slot) => (
-                  <div
-                    key={slot.days}
-                    aria-label={`${slot.days}: ${slot.hours}`}
-                  >
-                    <dt>
-                      <span aria-hidden="true">{slot.shortDays}</span>
-                      <span className="sr-only">{slot.days}</span>
-                    </dt>
-                    <dd>{slot.hours}</dd>
-                  </div>
-                ))}
-              </dl>
-            </div>
-          </aside>
-        </div>
-
-        <div className="about-content">
-          <p className="about-lead">
-            På La Jolie Clinic möter du Bouchra Itani, legitimerad
-            sjuksköterska, och Raiana Itani, undersköterska. Tillsammans
-            erbjuder de estetiska behandlingar som anpassas efter varje kunds
-            önskemål och behov.
-          </p>
-          <div className="team-list">
-            {TEAM.map((member) => (
-              <div key={member.name}>
-                <strong>{member.name}</strong>
-                <span>{member.role}</span>
-              </div>
-            ))}
+    <section className="visit" id="kontakt" aria-labelledby="visit-title">
+      <div className="shell">
+        <div className="booking">
+          <div className="booking-head">
+            <Kicker light>Boka tid</Kicker>
+            <h2 id="visit-title">Boka i tre steg</h2>
+            <p>
+              Bokningen sker via Bokadirekt, där du också ser hela utbudet och
+              aktuella priser.
+            </p>
           </div>
-          <ul className="value-list" aria-label="Våra värden">
-            {VALUES.map((value) => (
-              <li key={value}>
-                <div>
-                  <Check size={17} strokeWidth={1.8} aria-hidden="true" />{" "}
-                  {value}
-                </div>
+
+          <ol className="booking-flow">
+            {BOOKING_STEPS.map((step, index) => (
+              <li key={step.title}>
+                <span aria-hidden="true">{index + 1}</span>
+                <strong>{step.title}</strong>
+                <small>{step.text}</small>
               </li>
             ))}
-          </ul>
-          <div className="credential-line" aria-label="Trygghet och kompetens">
-            {CREDENTIALS.map((credential) => (
-              <span key={credential}>{credential}</span>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
-  )
-}
-
-function Trust() {
-  return (
-    <section className="trust-section" aria-label="Kundbetyg">
-      <FlowLines className="flow-lines--trust" />
-      <div className="shell trust-card">
-        <div className="trust-rating">
-          <span>4,9</span>
-          <small>av 5</small>
-        </div>
-        <div className="trust-copy">
-          <div className="stars" aria-label="5 av 5 stjärnor">
-            {Array.from({ length: 5 }, (_, index) => (
-              <Star
-                key={index}
-                size={17}
-                fill="currentColor"
-                strokeWidth={1.3}
-                aria-hidden="true"
-              />
-            ))}
-          </div>
-          <p className="trust-kicker">Verifierat på Bokadirekt</p>
-          <h2>1 939 kundbetyg</h2>
-        </div>
-        <p className="trust-note">
-          Ett omtyckt bemötande, bedömt av klinikens kunder.
-        </p>
-        <a
-          className="trust-link"
-          href={BOKADIREKT_URL}
-          target="_blank"
-          rel="noreferrer"
-        >
-          Läs omdömen
-          <ArrowUpRight size={16} strokeWidth={1.7} aria-hidden="true" />
-        </a>
-      </div>
-    </section>
-  )
-}
-
-function Contact() {
-  return (
-    <section className="contact" id="kontakt" aria-labelledby="contact-title">
-      <div className="shell booking-panel">
-        <div className="contact-copy">
-          <p className="eyebrow">Boka din tid</p>
-          <h2 id="contact-title">Din behandling börjar med ett tryggt val.</h2>
-          <p>
-            På Bokadirekt hittar du aktuella priser, hela behandlingsutbudet och
-            tider som passar dig.
-          </p>
-          <a
-            className="address-link"
-            href={MAPS_URL}
-            target="_blank"
-            rel="noreferrer"
-          >
-            <MapPin size={18} strokeWidth={1.7} aria-hidden="true" />
-            <span>
-              Hanssons väg 52
-              <br />
-              <small>Malmö</small>
-            </span>
-            <ArrowUpRight size={17} strokeWidth={1.7} aria-hidden="true" />
-          </a>
-        </div>
-
-        <div className="booking-card">
-          <div className="booking-card-heading">
-            <span className="booking-icon">
-              <CalendarDays size={22} strokeWidth={1.6} aria-hidden="true" />
-            </span>
-            <div>
-              <small>Bokning via</small>
-              <strong>Bokadirekt</strong>
-            </div>
-          </div>
-
-          <ol className="booking-steps">
-            <li>
-              <span>01</span>
-              <div>
-                <strong>Välj behandling</strong>
-                <small>Se hela utbudet och aktuella priser</small>
-              </div>
-            </li>
-            <li>
-              <span>02</span>
-              <div>
-                <strong>Hitta en tid</strong>
-                <small>Välj en ledig tid som passar dig</small>
-              </div>
-            </li>
-            <li>
-              <span>03</span>
-              <div>
-                <strong>Bekräfta bokningen</strong>
-                <small>Klart, vi ses på kliniken</small>
-              </div>
-            </li>
           </ol>
 
-          <a
-            className="button button--gold booking-button"
-            href={BOKADIREKT_URL}
-            target="_blank"
-            rel="noreferrer"
-          >
-            <CalendarDays size={17} strokeWidth={1.8} aria-hidden="true" />
-            Boka tid på Bokadirekt
-            <ArrowUpRight size={17} strokeWidth={1.7} aria-hidden="true" />
-          </a>
-          <p className="booking-note">
-            Du lämnar demosidan och fortsätter till Bokadirekt.
-          </p>
+          <div className="booking-cta">
+            <a
+              className="btn btn--gold"
+              href={BOKADIREKT_URL}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <CalendarDays size={17} strokeWidth={1.6} aria-hidden="true" />
+              Boka på Bokadirekt
+            </a>
+            <p className="booking-note">
+              Du lämnar demosidan och fortsätter till Bokadirekt.
+            </p>
+          </div>
+        </div>
+
+        <div className="visit-info">
+          <div className="visit-col">
+            <h3>Adress</h3>
+            <address>
+              {STREET}
+              <br />
+              {CITY}
+            </address>
+            <a
+              className="link-arrow"
+              href={MAPS_URL}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Vägbeskrivning
+              <ArrowUpRight size={15} strokeWidth={1.6} aria-hidden="true" />
+            </a>
+          </div>
+
+          <div className="visit-col">
+            <h3>Öppettider</h3>
+            <dl className="hours">
+              {OPENING_HOURS.map((slot) => (
+                <div key={slot.days}>
+                  <dt>{slot.days}</dt>
+                  <dd>{slot.hours}</dd>
+                </div>
+              ))}
+            </dl>
+            <p className="visit-note">Ordinarie öppettider</p>
+          </div>
+
+          <div className="visit-col">
+            <h3>Kontakt</h3>
+            <ul className="contact-lines">
+              <li>
+                <a href={`tel:${PHONE_RAW}`}>
+                  <Phone size={16} strokeWidth={1.6} aria-hidden="true" />
+                  {PHONE_DISPLAY}
+                </a>
+              </li>
+              <li>
+                <a href={`mailto:${EMAIL}`}>
+                  <Mail size={16} strokeWidth={1.6} aria-hidden="true" />
+                  {EMAIL}
+                </a>
+              </li>
+              <li>
+                <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer">
+                  <Instagram size={16} strokeWidth={1.6} aria-hidden="true" />
+                  @lajolieclinic
+                </a>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </section>
   )
 }
 
-function Footer() {
+function SiteFooter() {
   return (
-    <footer className="footer">
+    <footer className="site-footer">
       <div className="shell">
-        <Flourish className="flourish--footer" />
-      </div>
-      <div className="shell footer-inner">
-        <div className="footer-brand">
+        <a
+          className="footer-banner"
+          href="#top"
+          aria-label="La Jolie Clinic, till toppen"
+        >
           <img
-            src={logoAvatar}
-            alt="La Jolie Clinic"
-            width="48"
-            height="48"
+            src={logoBanner}
+            alt=""
+            width="1280"
+            height="140"
             loading="lazy"
           />
-          <Wordmark />
-        </div>
-
-        <nav aria-label="Externa länkar">
+        </a>
+        <nav className="footer-nav" aria-label="Sidfot">
+          {NAV_LINKS.map((link) => (
+            <a key={link.href} href={link.href}>
+              {link.label}
+            </a>
+          ))}
           <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer">
-            <Instagram size={16} strokeWidth={1.7} aria-hidden="true" />{" "}
             Instagram
           </a>
           <a href={BOKADIREKT_URL} target="_blank" rel="noreferrer">
-            <CalendarDays size={16} strokeWidth={1.7} aria-hidden="true" />{" "}
             Bokadirekt
           </a>
         </nav>
-
-        <div className="footer-meta">
-          <address className="footer-contact" aria-label="Kontaktuppgifter">
-            <a href={`tel:${PHONE_RAW}`}>
-              <Phone size={16} strokeWidth={1.7} aria-hidden="true" />{" "}
-              {PHONE_DISPLAY}
-            </a>
-            <a href={`mailto:${EMAIL}`}>
-              <Mail size={16} strokeWidth={1.7} aria-hidden="true" /> {EMAIL}
-            </a>
-          </address>
+        <div className="footer-fine">
+          <p>
+            La Jolie Clinic · {STREET}, {CITY}
+          </p>
           <p>Konceptdesign, ej officiell webbplats</p>
         </div>
       </div>
@@ -906,16 +719,16 @@ function Footer() {
 export default function App(): ReactNode {
   return (
     <>
-      <Header />
+      <Masthead />
       <main id="top">
-        <Hero />
-        <Treatments />
+        <Opening />
+        <Clinic />
+        <Services />
+        <Verdict />
         <Results />
-        <About />
-        <Trust />
-        <Contact />
+        <Visit />
       </main>
-      <Footer />
+      <SiteFooter />
     </>
   )
 }
