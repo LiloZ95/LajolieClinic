@@ -24,8 +24,8 @@
   --gold:#b8863f;
   --gold-deep:#8a5a2e;
   --gold-light:#f0cc8a;
-  /* Text and rules on brown surfaces */
-  --paper-muted:#fffaf2b8;
+  /* Secondary text on brown: beige at 85% clears 5.2:1 even on --mocha. */
+  --beige-muted:#e7d0b0d9;
   /* Hairlines */
   --line:#2e1d121f;
   --line-gold:#b8863f73;
@@ -190,7 +190,7 @@ address {
 }
 
 .btn--cocoa {
-  color:var(--paper);
+  color:var(--beige);
   background:var(--cocoa);
   border-color:var(--cocoa);
 }
@@ -207,13 +207,13 @@ address {
 }
 
 .btn--line:hover {
-  color:var(--paper);
+  color:var(--beige);
   background:var(--cocoa);
   border-color:var(--cocoa);
 }
 
 .btn--line-light {
-  color:var(--paper);
+  color:var(--beige);
   background:transparent;
   border-color:#f0cc8a8c;
 }
@@ -246,7 +246,7 @@ address {
 }
 
 .link-arrow--light {
-  color:var(--paper);
+  color:var(--beige);
   border-color:var(--gold-light);
 }
 
@@ -261,7 +261,7 @@ address {
   position:sticky;
   top:0;
   z-index:70;
-  color:var(--paper);
+  color:var(--beige);
   background:var(--mocha);
   border-bottom:1px solid var(--line-gold-dark);
 }
@@ -284,7 +284,7 @@ address {
 
 .masthead-nav a {
   padding:8px 0;
-  color:var(--paper-muted);
+  color:var(--beige-muted);
   border-bottom:1px solid transparent;
   font-size:.72rem;
   font-weight:500;
@@ -323,7 +323,7 @@ address {
   display:inline-flex;
   align-items:center;
   gap:8px;
-  color:var(--paper-muted);
+  color:var(--beige-muted);
   font-size:.8rem;
   letter-spacing:.04em;
   transition:color .18s;
@@ -348,7 +348,7 @@ address {
 .opening {
   position:relative;
   overflow:hidden;
-  color:var(--paper);
+  color:var(--beige);
   background:radial-gradient(110% 85% at 0% 0%,#6a4528 0%,transparent 58%),var(--cocoa);
   padding:clamp(64px,8vw,112px) 0 clamp(80px,9vw,128px);
 }
@@ -372,7 +372,7 @@ address {
 .opening-lead {
   max-width:520px;
   margin:0 0 36px;
-  color:var(--paper-muted);
+  color:var(--beige-muted);
   font-size:1.02rem;
   line-height:1.75;
 }
@@ -391,13 +391,13 @@ address {
   max-width:520px;
   margin:44px 0 0;
   padding-top:22px;
-  color:var(--paper-muted);
+  color:var(--beige-muted);
   border-top:1px solid var(--line-gold-dark);
   font-size:.84rem;
 }
 
 .opening-rating strong {
-  color:var(--paper);
+  color:var(--beige);
   font-weight:600;
 }
 
@@ -637,7 +637,7 @@ address {
 /* Verdict (rating band) ----------------------------------------------------- */
 
 .verdict {
-  color:var(--paper);
+  color:var(--beige);
   background:var(--medallion);
   padding:clamp(60px,7vw,88px) 0;
   text-align:center;
@@ -676,7 +676,7 @@ address {
 
 .verdict-score small {
   margin-left:12px;
-  color:var(--paper-muted);
+  color:var(--beige-muted);
   font-family:var(--font-text);
   font-size:.9rem;
   letter-spacing:.2em;
@@ -686,7 +686,7 @@ address {
 .verdict-text {
   max-width:420px;
   margin:16px 0 14px;
-  color:var(--paper-muted);
+  color:var(--beige-muted);
   font-size:.95rem;
 }
 
@@ -792,7 +792,7 @@ address {
   align-items:end;
   gap:44px 48px;
   padding:clamp(40px,5.5vw,72px);
-  color:var(--paper);
+  color:var(--beige);
   background:var(--cocoa);
 }
 
@@ -812,7 +812,7 @@ address {
 .booking-head p {
   max-width:460px;
   margin:20px 0 0;
-  color:var(--paper-muted);
+  color:var(--beige-muted);
   line-height:1.75;
 }
 
@@ -851,7 +851,7 @@ address {
 }
 
 .booking-flow small {
-  color:var(--paper-muted);
+  color:var(--beige-muted);
   font-size:.86rem;
 }
 
@@ -867,7 +867,7 @@ address {
 
 .booking-note {
   margin:0;
-  color:var(--paper-muted);
+  color:var(--beige-muted);
   font-size:.72rem;
 }
 
@@ -954,7 +954,7 @@ address {
 
 /* --mocha is the banner's own ground, so the logo image has no visible edge. */
 .site-footer {
-  color:var(--paper);
+  color:var(--beige);
   background:var(--mocha);
   padding:56px 0 36px;
   text-align:center;
@@ -983,7 +983,7 @@ address {
 
 .footer-nav a {
   padding:8px 0;
-  color:var(--paper-muted);
+  color:var(--beige-muted);
   font-size:.72rem;
   font-weight:500;
   letter-spacing:.16em;
@@ -1001,7 +1001,7 @@ address {
   justify-content:center;
   gap:6px 28px;
   padding-top:24px;
-  color:var(--paper-muted);
+  color:var(--beige-muted);
   border-top:1px solid var(--line-gold-dark);
   font-size:.74rem;
 }

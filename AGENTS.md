@@ -93,11 +93,11 @@ palette and none should be added**. Tokens live on `:root` in `src/index.css`:
 | `--medallion` | `#52331e` | rating band |
 | `--mocha` | `#5a3e29` | masthead and footer — the banner logo's own ground |
 | `--sand` | `#f3e7d5` | page background, about and results sections |
-| `--paper` | `#fffaf2` | treatments and contact sections, framed panels |
-| `--beige` | `#e7d0b0` | light-on-dark accents |
+| `--paper` | `#fffaf2` | treatments and contact sections, framed panels — surfaces only, never text |
+| `--beige` | `#e7d0b0` | all light text on brown (6.5:1 on mocha) |
 | `--taupe` | `#7d6a58` | muted text on paper (4.96:1); too light for sand |
 | `--bark` | `#66523f` | muted text on sand (6:1) |
-| `--paper-muted` | `#fffaf2b8` | secondary text on any brown (5.7:1 on mocha) |
+| `--beige-muted` | `#e7d0b0d9` | secondary text on any brown (5.2:1 on mocha) |
 | `--gold` | `#b8863f` | decorative only — 2.6:1 on sand, never body text |
 | `--gold-deep` | `#8a5a2e` | gold that must carry text on light |
 | `--gold-light` | `#f0cc8a` | gold on brown |
