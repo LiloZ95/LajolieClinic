@@ -129,6 +129,13 @@ Display type is Marcellus; text is Jost in small caps for labels.
   its order in step with the section order. Don't re-derive ids from labels.
 - `TREATMENTS` drives the numbered list in `#behandlingar`; the numbers come
   from the array index, so reordering renumbers automatically.
+- `RESULTS` drives the gallery in `#resultat`: `feature` items fill the first
+  row two across, the rest run four across (two on phones). `split` adds the
+  Före/Efter tags to a before/after pair — `"stacked"` (top/bottom) or
+  `"side"`. Leave it off for photos that aren't before/after.
+- Photography is JPEG, cut with `sips`: result photos are square 1000x1000,
+  the hero clinic photo 880x1100 (4:5, the shape of `.opening-arch`). Crop
+  away black phone-screenshot bars and frames first — no black in the palette.
 - Images are imported as ES modules (`import hero from './assets/…'`) so Vite
   rewrites the URL for the GitHub Pages sub-path. Never hard-code `/Images/…`;
   an absolute path silently 404s once `base` is not `/`.

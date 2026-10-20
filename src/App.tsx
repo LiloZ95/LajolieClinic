@@ -1,12 +1,16 @@
 import { useEffect, useState } from "react"
 import type { ReactNode } from "react"
 
-import heroClinic from "./assets/lajolie-hero-clinic.png"
-import lashBeforeAfter from "./assets/lash-before-after.png"
+import clinicRoom from "./assets/clinic-room.jpg"
 import logoBanner from "./assets/logo-banner.jpg"
 import logoSeal from "./assets/logo-seal.jpg"
 import logoWordmark from "./assets/logo-wordmark.jpg"
-import profileBeforeAfter from "./assets/profile-before-after.png"
+import resultColourLashes from "./assets/result-colour-lashes.jpg"
+import resultLashExtensions from "./assets/result-lash-extensions.jpg"
+import resultLashlift from "./assets/result-lashlift.jpg"
+import resultLips from "./assets/result-lips.jpg"
+import resultProfile from "./assets/result-profile.jpg"
+import resultSingleVolume from "./assets/result-single-volume.jpg"
 import {
   ArrowUpRight,
   CalendarDays,
@@ -130,6 +134,12 @@ const TREATMENTS: {
     ],
   },
   {
+    title: "Laserhårborttagning",
+    description:
+      "Hårborttagning med laser. Antal behandlingar och intervall anpassas efter hårtyp och område.",
+    services: ["Laser Soprano Ice Platinum"],
+  },
+  {
     title: "Fransar & ögonbryn",
     description:
       "Lyft, förlängning, färg och form, anpassat efter dina ögon och ditt ansikte.",
@@ -153,6 +163,55 @@ const TREATMENTS: {
       "Intim behandling",
       "BB Glow & Lips",
     ],
+  },
+]
+
+/**
+ * The results gallery. Every photo is a 1000x1000 JPEG. `split` places the
+ * Före/Efter tags on before/after pairs: halves stacked top/bottom, or side by
+ * side. `feature` items take a double-width tile on the first row.
+ */
+const RESULTS: {
+  src: string
+  alt: string
+  caption: string
+  split?: "stacked" | "side"
+  feature?: boolean
+}[] = [
+  {
+    src: resultLips,
+    alt: "Läppar före och efter behandling, före överst och efter nederst",
+    caption: "Läppbehandling",
+    split: "stacked",
+    feature: true,
+  },
+  {
+    src: resultProfile,
+    alt: "Profil före och efter behandling, före till vänster och efter till höger",
+    caption: "Profilbehandling",
+    split: "side",
+    feature: true,
+  },
+  {
+    src: resultLashlift,
+    alt: "Ögon före och efter lashlift, före överst och efter nederst",
+    caption: "Lashlift",
+    split: "stacked",
+  },
+  {
+    src: resultSingleVolume,
+    alt: "Singelfransar till vänster och volymfransar till höger",
+    caption: "Singel- och volymfransar",
+  },
+  {
+    src: resultColourLashes,
+    alt: "Två fransförlängningar med inslag av rosa respektive blått",
+    caption: "Färgade fransförlängningar",
+  },
+  {
+    src: resultLashExtensions,
+    alt: "Närbild av ett öga med fransförlängning",
+    caption: "Fransförlängning",
   },
 ]
 
@@ -366,10 +425,10 @@ function Opening() {
         <figure className="opening-visual">
           <div className="opening-arch">
             <img
-              src={heroClinic}
-              alt="Behandlingsbrits i ett ljust, stilla rum"
-              width="1086"
-              height="1448"
+              src={clinicRoom}
+              alt="Behandlingsrummet på kliniken, med behandlingsstol, spegel och certifikat på väggen"
+              width="880"
+              height="1100"
             />
           </div>
           <img
@@ -524,40 +583,39 @@ function Results() {
           </p>
         </div>
 
-        <div className="results-pair">
-          <figure className="result result--stacked">
-            <div className="result-frame">
-              <img
-                src={lashBeforeAfter}
-                alt="Ögon före och efter fransbehandling, före överst och efter nederst"
-                width="1254"
-                height="1254"
-                loading="lazy"
-              />
-              <span className="result-tag result-tag--before">Före</span>
-              <span className="result-tag result-tag--after">Efter</span>
-            </div>
-            <figcaption>
-              <span>01</span> Fransbehandling
-            </figcaption>
-          </figure>
-
-          <figure className="result result--side">
-            <div className="result-frame">
-              <img
-                src={profileBeforeAfter}
-                alt="Profil före och efter behandling, före till vänster och efter till höger"
-                width="1254"
-                height="1254"
-                loading="lazy"
-              />
-              <span className="result-tag result-tag--before">Före</span>
-              <span className="result-tag result-tag--after">Efter</span>
-            </div>
-            <figcaption>
-              <span>02</span> Profilbehandling
-            </figcaption>
-          </figure>
+        <div className="results-grid">
+          {RESULTS.map((result, index) => (
+            <figure
+              key={result.caption}
+              className={[
+                "result",
+                result.feature ? "result--feature" : "",
+                result.split ? `result--${result.split}` : "",
+              ]
+                .join(" ")
+                .trim()}
+            >
+              <div className="result-frame">
+                <img
+                  src={result.src}
+                  alt={result.alt}
+                  width="1000"
+                  height="1000"
+                  loading="lazy"
+                />
+                {result.split ? (
+                  <>
+                    <span className="result-tag result-tag--before">Före</span>
+                    <span className="result-tag result-tag--after">Efter</span>
+                  </>
+                ) : null}
+              </div>
+              <figcaption>
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                {result.caption}
+              </figcaption>
+            </figure>
+          ))}
         </div>
 
         <a

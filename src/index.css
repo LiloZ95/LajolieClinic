@@ -707,10 +707,12 @@ address {
   line-height:1.75;
 }
 
-.results-pair {
+/* Two feature tiles across the first row, then four small ones. The base
+   .result rules size the small tile; .result--feature scales them up. */
+.results-grid {
   display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:clamp(28px,4vw,56px);
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:44px clamp(20px,2.4vw,32px);
   margin-top:56px;
 }
 
@@ -718,12 +720,20 @@ address {
   margin:0;
 }
 
+.result--feature {
+  grid-column:span 2;
+}
+
 /* Picture-mount frame: paper margin inside a gold hairline. */
 .result-frame {
   position:relative;
-  padding:10px;
+  padding:8px;
   background:var(--paper);
   border:1px solid var(--line-gold);
+}
+
+.result--feature .result-frame {
+  padding:10px;
 }
 
 .result-frame img {
@@ -734,21 +744,32 @@ address {
 
 .result-tag {
   position:absolute;
-  top:22px;
-  left:22px;
-  padding:7px 10px;
+  top:16px;
+  left:16px;
+  padding:5px 7px;
   color:var(--gold-light);
   background:var(--cocoa);
-  font-size:.64rem;
+  font-size:.58rem;
   font-weight:600;
   line-height:1;
   letter-spacing:.2em;
   text-transform:uppercase;
 }
 
+.result--feature .result-tag {
+  top:22px;
+  left:22px;
+  padding:7px 10px;
+  font-size:.64rem;
+}
+
 /* Each "Efter" tag starts the second half of its photo. The profile shot's
    divider sits at ~43.5% of the width, not the middle. */
 .result--stacked .result-tag--after {
+  top:calc(50% + 8px);
+}
+
+.result--feature.result--stacked .result-tag--after {
   top:calc(50% + 12px);
 }
 
@@ -759,9 +780,16 @@ address {
 .result figcaption {
   display:flex;
   align-items:baseline;
+  gap:10px;
+  margin-top:14px;
+  font-family:var(--font-display);
+  font-size:1.1rem;
+  line-height:1.25;
+}
+
+.result--feature figcaption {
   gap:14px;
   margin-top:18px;
-  font-family:var(--font-display);
   font-size:1.35rem;
 }
 
@@ -1141,6 +1169,12 @@ address {
   .visit-col:last-child {
     grid-column:1/-1;
   }
+  .results-grid {
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  .result--feature {
+    grid-column:auto;
+  }
 }
 
 @media(max-width:700px) {
@@ -1216,23 +1250,32 @@ address {
     margin-left:8px;
     font-size:.74rem;
   }
-  .results-pair {
-    grid-template-columns:1fr;
-    gap:40px;
+  .results-grid {
+    gap:32px 14px;
     margin-top:40px;
   }
-  .result-frame {
+  .result--feature {
+    grid-column:1/-1;
+  }
+  .result--feature .result-frame {
     padding:8px;
   }
-  .result-tag {
+  .result--feature .result-tag {
     top:16px;
     left:16px;
   }
-  .result--stacked .result-tag--after {
+  .result--feature.result--stacked .result-tag--after {
     top:calc(50% + 8px);
   }
   .result--side .result-tag--after {
     left:calc(43.5% + 14px);
+  }
+  .result figcaption {
+    gap:8px;
+    font-size:1rem;
+  }
+  .result--feature figcaption {
+    font-size:1.25rem;
   }
   .results-more {
     width:100%;
