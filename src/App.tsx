@@ -1,7 +1,13 @@
 import { useEffect, useState } from "react"
 import type { ReactNode } from "react"
 
+import clinicCertificates from "./assets/clinic-certificates.jpg"
+import clinicCounter from "./assets/clinic-counter.jpg"
+import clinicDusk from "./assets/clinic-dusk.jpg"
+import clinicEntrance from "./assets/clinic-entrance.jpg"
+import clinicReception from "./assets/clinic-reception.jpg"
 import clinicRoom from "./assets/clinic-room.jpg"
+import clinicStreet from "./assets/clinic-street.jpg"
 import logoBanner from "./assets/logo-banner.jpg"
 import logoSeal from "./assets/logo-seal.jpg"
 import logoWordmark from "./assets/logo-wordmark.jpg"
@@ -235,6 +241,48 @@ const PRINCIPLES = [
     numeral: "III",
     title: "Allt under ett tak",
     text: "Injektioner, hudvård, fransar och kroppsbehandlingar på samma klinik, så att flera behandlingar kan planeras som en helhet.",
+  },
+]
+
+/**
+ * The arched photo row at the foot of #om-oss, in the order a visitor meets
+ * them. Every photo is a 750x1000 (3:4) JPEG; the arch crops the top corners,
+ * so keep signs and faces below the top quarter.
+ */
+const CLINIC_PHOTOS: {
+  src: string
+  alt: string
+  caption: string
+}[] = [
+  {
+    src: clinicStreet,
+    alt: "Trottoaren utanför kliniken, med den utskjutande skylten La Jolie Clinic på fasaden",
+    caption: "Från gatan",
+  },
+  {
+    src: clinicEntrance,
+    alt: "Klinikens fasad med den utskjutande skylten La Jolie Clinic och skyltfönstret mot gatan",
+    caption: "Entrén",
+  },
+  {
+    src: clinicReception,
+    alt: "Receptionen med upplyst La Jolie-skylt, två fåtöljer och ett runt bord med en blombukett",
+    caption: "Receptionen",
+  },
+  {
+    src: clinicCounter,
+    alt: "Doftpinnar och klinikens visitkort på receptionsdisken",
+    caption: "Vid disken",
+  },
+  {
+    src: clinicCertificates,
+    alt: "Inramade utbildningsbevis för Bouchra Itani på väggen i behandlingsrummet",
+    caption: "Utbildningsbevis",
+  },
+  {
+    src: clinicDusk,
+    alt: "Den upplysta La Jolie-skylten sedd genom skyltfönstret i skymningen",
+    caption: "I skymningen",
   },
 ]
 
@@ -484,6 +532,39 @@ function Clinic() {
             </li>
           ))}
         </ol>
+      </div>
+
+      <div className="shell clinic-photos">
+        <div className="clinic-photos-head">
+          <h3 id="clinic-photos-title">Välkommen in</h3>
+          <p>
+            Så här ser det ut hos oss på {STREET}, från entrén mot gatan till
+            receptionen där vi tar emot dig.
+          </p>
+        </div>
+
+        {/* Scrolls sideways below 960px, so it must be keyboard-focusable. */}
+        <div
+          className="clinic-photos-strip"
+          role="region"
+          aria-labelledby="clinic-photos-title"
+          tabIndex={0}
+        >
+          {CLINIC_PHOTOS.map((photo) => (
+            <figure key={photo.caption} className="clinic-photo">
+              <div className="clinic-photo-arch">
+                <img
+                  src={photo.src}
+                  alt={photo.alt}
+                  width="750"
+                  height="1000"
+                  loading="lazy"
+                />
+              </div>
+              <figcaption>{photo.caption}</figcaption>
+            </figure>
+          ))}
+        </div>
       </div>
     </section>
   )

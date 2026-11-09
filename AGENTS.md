@@ -133,9 +133,19 @@ Display type is Marcellus; text is Jost in small caps for labels.
   row two across, the rest run four across (two on phones). `split` adds the
   Före/Efter tags to a before/after pair — `"stacked"` (top/bottom) or
   `"side"`. Leave it off for photos that aren't before/after.
+- `CLINIC_PHOTOS` drives the "Välkommen in" row of arches at the foot of
+  `#om-oss`: one row with every other arch set lower (the column count
+  follows the array), turning into a sideways swipe strip below 960px. Six
+  is about the most one row holds before captions crowd. Order is a
+  visitor's route: in from the street, through reception, and back out past
+  the window at dusk. Don't call
+  it "Galleri" or lay it out as an even 3-column grid.
 - Photography is JPEG, cut with `sips`: result photos are square 1000x1000,
-  the hero clinic photo 880x1100 (4:5, the shape of `.opening-arch`). Crop
-  away black phone-screenshot bars and frames first — no black in the palette.
+  the hero clinic photo 880x1100 (4:5, the shape of `.opening-arch`), clinic
+  photos 750x1000 (3:4) with signs and faces below the top quarter, since the
+  arch clips the corners. Crop away black phone-screenshot bars and frames
+  first — no black in the palette. Pass `-s format png` on intermediate
+  `sips` steps, or each one re-compresses as JPEG.
 - Images are imported as ES modules (`import hero from './assets/…'`) so Vite
   rewrites the URL for the GitHub Pages sub-path. Never hard-code `/Images/…`;
   an absolute path silently 404s once `base` is not `/`.

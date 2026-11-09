@@ -554,6 +554,82 @@ address {
   line-height:1.7;
 }
 
+/* A row of arched windows into the clinic, every other one set lower. The
+   head reuses the clinic-grid columns so the copy lines up with the panel. */
+.clinic-photos {
+  margin-top:clamp(72px,9vw,112px);
+  padding-top:clamp(44px,5vw,60px);
+  border-top:1px solid var(--line-gold);
+}
+
+.clinic-photos-head {
+  display:grid;
+  grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);
+  align-items:baseline;
+  gap:16px clamp(48px,8vw,120px);
+}
+
+.clinic-photos-head h3 {
+  margin:0;
+  font-size:clamp(1.8rem,3vw,2.4rem);
+  line-height:1.15;
+}
+
+.clinic-photos-head p {
+  max-width:520px;
+  margin:0;
+  color:var(--bark);
+  line-height:1.75;
+}
+
+/* One equal column per photo, however many CLINIC_PHOTOS holds. */
+.clinic-photos-strip {
+  display:grid;
+  grid-auto-flow:column;
+  grid-auto-columns:minmax(0,1fr);
+  align-items:start;
+  gap:clamp(18px,2.2vw,30px);
+  margin-top:52px;
+  /* Room for the outline drawn outside the first arches. */
+  padding-top:6px;
+}
+
+.clinic-photo {
+  margin:0;
+}
+
+.clinic-photo:nth-child(even) {
+  margin-top:56px;
+}
+
+/* Same arch as the hero photo; the outline follows the curve as a gold rule. */
+.clinic-photo-arch {
+  aspect-ratio:3/4;
+  overflow:hidden;
+  background:var(--mocha);
+  border-radius:999px 999px 0 0;
+  outline:1px solid var(--line-gold);
+  outline-offset:5px;
+}
+
+.clinic-photo-arch img {
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.clinic-photo figcaption {
+  margin-top:18px;
+  color:var(--bark);
+  font-size:.68rem;
+  font-weight:600;
+  line-height:1.3;
+  letter-spacing:.2em;
+  text-align:center;
+  text-transform:uppercase;
+}
+
 /* Services (treatments) ----------------------------------------------------- */
 
 .services {
@@ -1138,7 +1214,8 @@ address {
 
 @media(max-width:960px) {
   .opening-grid,
-  .clinic-grid {
+  .clinic-grid,
+  .clinic-photos-head {
     grid-template-columns:1fr;
   }
   .opening h1 {
@@ -1147,6 +1224,31 @@ address {
   .opening-visual {
     width:min(100% - 52px,400px);
     margin:24px auto 0;
+  }
+  /* One row is too narrow from here: it becomes a sideways strip that
+     bleeds to the screen edge, with the next arch peeking in. The negative
+     margin and padding match the .shell gutter. */
+  .clinic-photos-strip {
+    grid-auto-columns:30%;
+    overflow-x:auto;
+    margin-inline:-24px;
+    padding:6px 24px 4px;
+    scroll-padding-inline:24px;
+    scroll-snap-type:x mandatory;
+    overscroll-behavior-x:contain;
+    scrollbar-width:none;
+  }
+  .clinic-photos-strip::-webkit-scrollbar {
+    display:none;
+  }
+  .clinic-photos-strip:focus-visible {
+    outline-offset:-2px;
+  }
+  .clinic-photo {
+    scroll-snap-align:start;
+  }
+  .clinic-photo:nth-child(even) {
+    margin-top:36px;
   }
   .service {
     grid-template-columns:44px minmax(0,1fr);
@@ -1234,6 +1336,17 @@ address {
   }
   .principles h3 {
     font-size:1.35rem;
+  }
+  .clinic-photos-strip {
+    grid-auto-columns:64%;
+    gap:20px;
+    margin-top:36px;
+    margin-inline:-16px;
+    padding-inline:16px;
+    scroll-padding-inline:16px;
+  }
+  .clinic-photo:nth-child(even) {
+    margin-top:0;
   }
   .service {
     grid-template-columns:34px minmax(0,1fr);
